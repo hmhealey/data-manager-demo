@@ -1,6 +1,6 @@
 import {applyMiddleware, combineReducers, createStore} from 'redux';
 import createSagaMiddleware from 'redux-saga';
-import { rootSaga } from './sagas';
+import {rootSaga} from './sagas';
 
 export function configureStore() {
     const sagaMiddleware = createSagaMiddleware();
@@ -10,10 +10,7 @@ export function configureStore() {
         batchCount,
     });
 
-    const store = createStore(
-        reducer,
-        applyMiddleware(sagaMiddleware),
-    );
+    const store = createStore(reducer, applyMiddleware(sagaMiddleware));
 
     sagaMiddleware.run(rootSaga);
 
@@ -21,9 +18,14 @@ export function configureStore() {
 }
 
 function fetchCount(state = 0, action) {
-    switch(action.type) {
+    switch (action.type) {
         case 'FETCHED_THING':
-            console.log('FETCHED_THING', state, action.count, state + action.count);
+            console.log(
+                'FETCHED_THING',
+                state,
+                action.count,
+                state + action.count,
+            );
             return state + action.count;
 
         default:
@@ -32,10 +34,10 @@ function fetchCount(state = 0, action) {
 }
 
 function batchCount(state = 0, action) {
-    switch(action.type) {
+    switch (action.type) {
         case 'FETCHED_THING':
-            return state +1;
-        
+            return state + 1;
+
         default:
             return state;
     }

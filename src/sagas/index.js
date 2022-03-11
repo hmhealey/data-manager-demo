@@ -10,7 +10,7 @@ import {
 
 function wait(delay) {
     console.log('waiting... ', delay);
-    return new Promise(resolve => setTimeout(resolve, delay));
+    return new Promise((resolve) => setTimeout(resolve, delay));
 }
 
 // This debounces until it's been 1s since the last FETCH_THING before doing the fetching. I want to add a version
@@ -28,7 +28,6 @@ function* fetchThing() {
         let concurrentFetches = 1;
 
         while (true) {
-            
             console.log('looping...');
             const {anotherFetch} = yield race({
                 delay: wait(1000),
@@ -49,7 +48,5 @@ function* fetchThing() {
 }
 
 export function* rootSaga() {
-    yield all([
-        fetchThing(),
-    ]);
+    yield all([fetchThing()]);
 }
