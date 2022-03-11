@@ -5,7 +5,6 @@ import {
     race,
     take,
     takeEvery,
-    takeLatest,
 } from 'redux-saga/effects';
 
 function wait(delay) {
@@ -42,11 +41,19 @@ function* fetchThing() {
             }
         }
 
-        console.log('fetched batch');
-        yield put({type: 'FETCHED_THING', count: concurrentFetches});
+        console.log('doing fetch for batch');
+        yield put({type: 'DO_FETCH_THING', count: concurrentFetches});
     }
 }
 
+function* doFetch(action) {
+    console.log('fetching batch of ' + action.count + '...');
+    yield wait(2000);
+
+    console.log('fetched batch of ' + action.count);
+    yield put({type: 'FETCHED_THING', count: action.count});
+}
+
 export function* rootSaga() {
-    yield all([fetchThing()]);
+    yield all([fetchThing(), takeEvery('DO_FETCH_THING', doFetch)]);
 }
