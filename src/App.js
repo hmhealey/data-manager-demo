@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import {Provider, useDispatch, useSelector} from 'react-redux';
 
-import {CardLoader} from './card_loader';
+import {CardLoader} from './pages/card_loader';
 import {configureStore} from './store';
 
 import './App.css';

@@ -17,38 +17,6 @@ function* doFetch(action) {
     yield put({type: 'FETCHED_THING', count: action.batched.length});
 }
 
-const fetchCard = batchThrottle({
-    incoming: 'FETCH_CARD',
-    outgoing: 'DO_FETCH_CARD',
-});
-function* doFetchCard(action) {
-    const identifiers = action.batched.map((a) => ({name: a.name}));
-    console.log('fetching', identifiers);
-
-    const response = yield call(async () => {
-        const response = await fetch(
-            'https://api.scryfall.com/cards/collection',
-            {
-                body: JSON.stringify({identifiers}),
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                method: 'POST',
-            },
-        );
-
-        return response.json();
-    });
-
-    console.log('received cards', response.data);
-    yield put({type: 'RECEIVED_CARDS', cards: response.data});
-}
-
 export function* rootSaga() {
-    yield all([
-        fetchThing(),
-        takeEvery('DO_FETCH_THING', doFetch),
-        fetchCard(),
-        takeEvery('DO_FETCH_CARD', doFetchCard),
-    ]);
+    yield all([fetchThing(), takeEvery('DO_FETCH_THING', doFetch)]);
 }

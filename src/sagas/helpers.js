@@ -7,7 +7,6 @@ export function wait(delay) {
 
 export function batchDebounce({incoming, outgoing, delay = 1000}) {
     return function* () {
-        console.log('fetchThing', incoming, outgoing);
         const incomingChannel = yield actionChannel(incoming);
 
         while (true) {

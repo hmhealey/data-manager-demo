@@ -1,6 +1,6 @@
 import {useState} from 'react';
 
-import {useCard} from './hooks';
+import CardDisplay from '../components/card_display';
 
 export function CardLoader() {
     const [cardNames, setCardNames] = useState([]);
@@ -20,7 +20,7 @@ export function CardLoader() {
             <textarea
                 onSubmit={onSubmit}
                 onKeyDown={onKeyDown}
-                style={{width: 600, height: 400}}
+                style={{width: 400, height: 300, resize: 'none'}}
             />
             <div style={{display: 'flex', flexWrap: 'wrap'}}>
                 {cardNames
@@ -36,23 +36,4 @@ export function CardLoader() {
             </div>
         </>
     );
-}
-
-function CardDisplay(props) {
-    const card = useCard(props.name);
-
-    let content;
-    if (card) {
-        content = (
-            <img
-                alt={props.name}
-                src={card.image_uris.normal}
-                style={{width: 'inherit'}}
-            />
-        );
-    } else {
-        content = props.name;
-    }
-
-    return <div style={{width: 150, height: 225, padding: 5}}>{content}</div>;
 }

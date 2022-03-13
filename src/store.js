@@ -3,6 +3,7 @@ import {applyMiddleware, combineReducers, createStore} from 'redux';
 
 import createSagaMiddleware from 'redux-saga';
 import {rootSaga} from './sagas';
+import cardsSaga from './sagas/cards';
 
 export function configureStore() {
     const sagaMiddleware = createSagaMiddleware();
@@ -19,6 +20,7 @@ export function configureStore() {
     );
 
     sagaMiddleware.run(rootSaga);
+    sagaMiddleware.run(cardsSaga);
 
     window.store = store;
 
