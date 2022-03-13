@@ -35,3 +35,36 @@ export function batchDebounce({incoming, outgoing, delay = 1000}) {
         }
     };
 }
+
+export function batchThrottle({incoming, outgoing, delay = 1000}) {
+    return function* () {
+        console.log('fetchThing', incoming, outgoing);
+        const incomingChannel = yield actionChannel(incoming);
+
+        while (true) {
+            const firstAction = yield take(incomingChannel);
+            console.log('starting first batch');
+
+            const timeout = wait(delay);
+
+            let batched = [firstAction];
+
+            while (true) {
+                const {action} = yield race({
+                    delay: timeout,
+                    action: take(incomingChannel),
+                });
+
+                if (action) {
+                    console.log('adding fetch');
+                    batched.push(action);
+                } else {
+                    break;
+                }
+            }
+
+            console.log('doing fetch for batch');
+            yield put({type: outgoing, batched});
+        }
+    };
+}

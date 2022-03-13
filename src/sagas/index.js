@@ -1,10 +1,10 @@
 import {all, put, takeEvery} from 'redux-saga/effects';
-import {batchDebounce, wait} from './helpers';
+import {batchDebounce, batchThrottle, wait} from './helpers';
 
 // This debounces until it's been 1s since the last FETCH_THING before doing the fetching. I want to add a version
 // that throttles, but first, I should do something async to simulate an actual fetch and make sure that we can
 // handle a batch that's sent while a previous batch is processing. Blast processing.
-const fetchThing = batchDebounce({
+const fetchThing = batchThrottle({
     incoming: 'FETCH_THING',
     outgoing: 'DO_FETCH_THING',
 });
