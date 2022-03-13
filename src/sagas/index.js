@@ -20,38 +20,38 @@ function* fetchThing() {
     const fetchChannel = yield actionChannel('FETCH_THING');
 
     while (true) {
-        yield take(fetchChannel);
+        const firstAction = yield take(fetchChannel);
 
         console.log('starting fetch batch');
 
-        let concurrentFetches = 1;
+        let batched = [firstAction];
 
         while (true) {
             console.log('looping...');
-            const {anotherFetch} = yield race({
+            const {action} = yield race({
                 delay: wait(1000),
-                anotherFetch: take(fetchChannel),
+                action: take(fetchChannel),
             });
 
-            if (anotherFetch) {
+            if (action) {
                 console.log('adding fetch');
-                concurrentFetches += 1;
+                batched.push(action);
             } else {
                 break;
             }
         }
 
         console.log('doing fetch for batch');
-        yield put({type: 'DO_FETCH_THING', count: concurrentFetches});
+        yield put({type: 'DO_FETCH_THING', batched});
     }
 }
 
 function* doFetch(action) {
-    console.log('fetching batch of ' + action.count + '...');
+    console.log('fetching batch of ' + action.batched.length + '...');
     yield wait(2000);
 
-    console.log('fetched batch of ' + action.count);
-    yield put({type: 'FETCHED_THING', count: action.count});
+    console.log('fetched batch of ' + action.batched.length);
+    yield put({type: 'FETCHED_THING', count: action.batched.length});
 }
 
 export function* rootSaga() {
