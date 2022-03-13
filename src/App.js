@@ -1,6 +1,7 @@
 import {useState} from 'react';
 import {Provider, useDispatch, useSelector} from 'react-redux';
 
+import {CardLoader} from './card_loader';
 import {configureStore} from './store';
 
 import './App.css';
@@ -10,7 +11,8 @@ function App() {
     return (
         <Provider store={store}>
             <div className="App">
-                <FetchButton />
+                {/* <FetchButton /> */}
+                <CardLoader />
             </div>
         </Provider>
     );
