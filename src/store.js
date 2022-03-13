@@ -1,4 +1,6 @@
+import {composeWithDevTools} from '@redux-devtools/extension';
 import {applyMiddleware, combineReducers, createStore} from 'redux';
+
 import createSagaMiddleware from 'redux-saga';
 import {rootSaga} from './sagas';
 
@@ -10,7 +12,10 @@ export function configureStore() {
         batchCount,
     });
 
-    const store = createStore(reducer, applyMiddleware(sagaMiddleware));
+    const store = createStore(
+        reducer,
+        composeWithDevTools({})(applyMiddleware(sagaMiddleware)),
+    );
 
     sagaMiddleware.run(rootSaga);
 
