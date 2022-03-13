@@ -8,7 +8,11 @@ const fetchCard = batchThrottle({
 });
 
 function* doFetchCard(action) {
-    const identifiers = action.batched.map((a) => ({name: a.name}));
+    let names = action.batched.map((a) => a.name);
+    names = Array.from(new Set(names));
+
+    const identifiers = names.map((name) => ({name}));
+
     console.log('fetching', identifiers);
 
     const response = yield call(async () => {
